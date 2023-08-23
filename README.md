@@ -75,7 +75,71 @@ Given that there are many weather stations that the provided NEA API consists of
 ### Model prediction
 
 Prediction for LSTM model is alittle different. From our understanding to forecast/predict WBGT for timeframe 2hrs ahead of current time involves providing dataset obtain from 2hrs prior of current time.
+
 As such code consist of manipulating of dataset such that we can achieve this. User can input X hours, and the program would appropriately filter the DF to obtain the necessary datasets for input of prediction.
+
+```python
+
+def predictModel(model,hour,df):
+    current_time = datetime.now()
+
+    print(current_time)
+
+    # Calculate the end point of the 5-hour interval from the current time
+    end_time = current_time - timedelta(hours=hour)
+
+    print(end_time)
+
+    print(df.tail())
+
+    # Convert timestamp column to datetime if needed
+    df['timestamp'] = pd.to_datetime(df['timestamp'])
+
+    # Filter the DataFrame to get rows within the 5-hour interval (Include the current time as well)
+    new_df = df[df['timestamp'] > end_time]
+
+    print(new_df)
+
+    # Calculate the number of rows to select (approximately 4 per hour)
+    num_rows_to_select = 4 * hour
+    num_rows = len(new_df)
+
+    # Select rows at regular intervals
+    interval = max(1, num_rows // num_rows_to_select)  # Ensure at least 1 row selected
+    selected_indices = range(0, num_rows, interval)
+    selected_rows = new_df.iloc[selected_indices]
+
+    X = selected_rows[['temperature', 'humidity']].values
+
+    print(X.shape)
+
+    X = X.reshape(X.shape[0], 1, X.shape[1])
+    
+    # Predict using the model
+    predictions = model.predict(X)
+
+    # Create a new DataFrame to store the timestamp and predictions
+    timestamp_values = selected_rows['timestamp'].values
+    predicted_values = predictions.reshape(-1)
+    
+    # Create a list to store the timestamp and predictions as dictionaries
+    result_list = []
+    for timestamp, prediction in zip(selected_rows['timestamp'], predictions):
+        # Convert timestamp to string in the desired format (adjust format as needed)
+
+        future_timestamp = timestamp + timedelta(hours=hour)
+
+        timestamp_str = future_timestamp.strftime('%Y-%m-%d %H:%M:%S')
+
+        # Append the timestamp and prediction as dictionaries to the result_list
+        result_list.append({'timestamp': timestamp_str, 'predicted_value': str(prediction[0])})
+
+    # Convert the result_list to JSON format
+    result_json = json.dumps(result_list)
+
+    return result_json
+
+```
 
 ## App.py
 
