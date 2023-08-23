@@ -36,6 +36,40 @@ The code mainly does the following:
 
 Given the temporal nature of WBGT, Long Short-Term Memory (LSTM) models are good fit to our requirements.
 This mainly focuses on creation of the model and the saving of it as a .h5 format file for future retraining or loading. h5 format is more compact, stores model architecture and weights alone with related information such as training history and configuration.
+
+```python
+def trainModel(station_id):
+    # 1 Model for each station
+    df = getDataFrame(station_id)
+
+    # Split the data into input features (X) and target variable (y)
+    X = df[['temperature', 'humidity']].values
+    y = df['WBGT'].values
+
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Reshape the input features for LSTM (assuming you have a time step of 1)
+    X_train = X_train.reshape(X_train.shape[0], 1, X_train.shape[1])
+    X_test = X_test.reshape(X_test.shape[0], 1, X_test.shape[1])
+
+    # Build the LSTM model
+    model = Sequential()
+    model.add(LSTM(25, input_shape=(X_train.shape[1], X_train.shape[2])))
+    model.add(Dense(1))
+
+    # Compile the model
+    model.compile(loss='mean_squared_error', optimizer='adam')
+
+    # Train the model
+    model.fit(X_train, y_train, epochs=20, batch_size=32, validation_data=(X_test, y_test))
+
+    model_filename = f'model_{station_id}.h5'
+
+    model.save(model_filename)
+
+```
+
 Given that there are many weather stations that the provided NEA API consists of, we will have one LSTM model for each of the stations. 
 
 ### Model prediction
