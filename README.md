@@ -49,6 +49,14 @@ We will be using Flask to deploy our test environment. Mapping the various endpo
 In order to deploy it onto Cloud Services such as Azure in this demo, we should containerise our code using Docker. 
 We can do so by creating a Dockerfile (.dockerignore should you wish to exclude some files).
 
+```python
+COPY requirements.txt .
+
+RUN pip3 install -r requirements.txt
+```
+Here we specify the program to pip install all the required dependencies listed in requirements.txt
+
+Finally, we will be using Gunicorn as a means to deploy our overall Flask Web Server.
 
 
 
