@@ -140,6 +140,7 @@ def predictModel(model,hour,df):
     return result_json
 
 ```
+We return our result in JSON format as our application is a API endpoint.
 
 ## App.py
 
