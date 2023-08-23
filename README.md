@@ -4,6 +4,7 @@ The wet-bulb globe temperature (WBGT) is a type of apparent temperature used to 
 
 True WBGT is hard to calculate especially without specific variables like Globe thermometer temperature. As such instead this demo aims to look at deriving WBGT from just 2 easy obtainable variables such as Temperature and Humidity.
 In this example we will be making use of NEA's "Realtime Weather Readings across Singapore" API to obtain these variables. https://beta.data.gov.sg/datasets/1459/view
+
 We can then make use of a WBGT table below to find the associated WBGT value using extrapolation which is our main aim of this program.
 
 ![WBGT Chart](https://github.com/coldoasis/wbgt-flaskapi/assets/124854971/4a03cf4f-a253-40ef-9bd4-b195b0089b77)
