@@ -2,7 +2,7 @@
 
 The wet-bulb globe temperature (WBGT) is a type of apparent temperature used to estimate the effect of temperature, humidity, wind speed (wind chill), and visible and infrared radiation (usually sunlight) on humans. It is used by industrial hygienists, athletes, sporting events and the military to determine appropriate exposure levels to high temperatures. It is derived from the following formula: WBGT=0.7Tw+0.2Tg+0.1T
 
-True WBGT is hard to calculate especially without specific variables like Globe thermometer temperature. As such instead we would be looking at deriving WBGT from just 2 easy obtainable variables such as Temperature and Humidity.
+True WBGT is hard to calculate especially without specific variables like Globe thermometer temperature. As such instead this demo aims to look at deriving WBGT from just 2 easy obtainable variables such as Temperature and Humidity.
 In this example we will be making use of NEA's "Realtime Weather Readings across Singapore" API to obtain these variables. 
 We can then make use of a WBGT table below to find the associated WBGT value using extrapolation which is our main aim of this program.
 
